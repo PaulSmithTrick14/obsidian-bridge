@@ -1,11 +1,11 @@
 {
 	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"name": "Bridge Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"description": "Use a code block top display bridge hands and/or auctions.  Uses Bridge Base HandViewer to display",
+	"author": "Paul Smith",
+	"authorUrl": "https://trick14.com",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
