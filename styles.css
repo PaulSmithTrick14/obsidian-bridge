@@ -1,8 +1,66 @@
-/*
+.bridge-styler {
+    & .block-language-handviewer {
+        display: flex;
+        justify-content: center;
+    }
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+    & .north,
+    & .south,
+    & .east,
+    & .west {
+        width: 200px;
+        height: 200px;
+        &.auction {
+            height: 400px;
+        }
+    }
 
-If your plugin does not need CSS, delete this file.
+    & .north.south {
+        width: 200px;
+        height: 350px;
+        &.auction {
+            width: 400px;
+        }
+    }
 
-*/
+    & .east.west {
+        width: 400px;
+        height: 175px;
+        &.auction {
+            height: 375px;
+        }
+    }
+
+    & .north.east,
+    & .north.west,
+    & .south.east,
+    & .south.west {
+        width: 400px;
+        height: 350px;
+    }
+
+    & .north.east.south,
+    & .north.west.south,
+    & .east.south.west,
+    & .east.north.west {
+        width: 600px;
+        height: 525px;
+    }
+
+    .clubSuit::before {
+        content: '♣';
+        color: black;
+    }
+    .heartSuit::before {
+        content: '♥';
+        color: #cb0000;
+    }
+    .diamondSuit::before {
+        content: '♦';
+        color: #cb0000;
+    }
+    .spadeSuit::before {
+        content: '♠';
+        color: black;
+    }
+}

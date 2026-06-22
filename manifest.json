@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Bridge Plugin",
-	"version": "1.0.0",
+	"id": "bridge-styler",
+	"name": "Bridge Styler",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Use a code block top display bridge hands and/or auctions.  Uses Bridge Base HandViewer to display",
 	"author": "Paul Smith",
 	"authorUrl": "https://trick14.com",
-	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
