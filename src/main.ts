@@ -37,7 +37,7 @@ export default class BridgeStylerPlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		this.settings = { ...structuredClone(DEFAULT_SETTINGS), ...convertSettings(await this.loadData()) };
+		this.settings = { ...structuredClone(DEFAULT_SETTINGS), ...convertSettings(await this.loadData() as BridgeStylerSettings) };
 	}
 
 	async saveSettings(): Promise<void> {

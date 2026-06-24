@@ -32,7 +32,7 @@ export class BridgeStylerTab extends PluginSettingTab {
         containerEl.empty();
 
         new Setting(containerEl)
-                .setName('Suit Symbol Style')
+                .setName('Suit symbol style')
                 .setDesc('Standard black/red solid suits, bbo style orange and green minors, outline minor suit symbols')
                 .addDropdown((dropper) => dropper
                     .addOptions({ standard: 'Standard', bbo: 'BBO', minorOutline: 'Outline minors'})
