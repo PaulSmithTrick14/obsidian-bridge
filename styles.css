@@ -1,33 +1,34 @@
 .bridge-styler {
-    & .block-language-handviewer {
+    --base-size: calc(8 * var(--font-text-size));
+    /* & .block-language-handviewer {
         display: flex;
         justify-content: center;
-    }
+    } */
 
     & .north,
     & .south,
     & .east,
     & .west {
-        width: 200px;
-        height: 200px;
+        width: var(--base-size);
+        height: var(--base-size);
         &.auction {
-            height: 400px;
+            height: calc(2 * var(--base-size));
         }
     }
 
     & .north.south {
-        width: 200px;
-        height: 350px;
+        width: var(--base-size);
+        height: calc(2 * var(--base-size));
         &.auction {
-            width: 400px;
+            width: calc(2 * var(--base-size));
         }
     }
 
     & .east.west {
-        width: 400px;
-        height: 175px;
+        width: calc(2 * var(--base-size));
+        height: var(--base-size);
         &.auction {
-            height: 375px;
+            height: calc(1.875 * var(--base-size));
         }
     }
 
@@ -35,32 +36,81 @@
     & .north.west,
     & .south.east,
     & .south.west {
-        width: 400px;
-        height: 350px;
+        width: calc(2 * var(--base-size));
+        height: calc(1.75 * var(--base-size));
     }
 
     & .north.east.south,
     & .north.west.south,
     & .east.south.west,
     & .east.north.west {
-        width: 600px;
-        height: 525px;
+        width: calc(3 * var(--base-size));
+        height: calc(2.75 * var(--base-size));
     }
 
-    .clubSuit::before {
-        content: '♣';
-        color: black;
+    & .snippet {
+        white-space: nowrap;
     }
-    .heartSuit::before {
-        content: '♥';
-        color: #cb0000;
-    }
-    .diamondSuit::before {
-        content: '♦';
-        color: #cb0000;
-    }
-    .spadeSuit::before {
+    
+    & .spadeSuit::before {
         content: '♠';
         color: black;
     }
+
+    & .heartSuit::before {
+        content: '♥';
+        color: #cb0000;
+    }
+    
+    & .diamondSuit::before {
+        content: '♦';
+        color: #cb0000;
+    }
+    &.minorOutline .diamondSuit::before {
+        content: '♢';
+        color: #cb0000;
+    }
+    &.bbo .diamondSuit::before {
+        color: orange;
+    }
+
+    & .clubSuit::before {
+        content: '♣';
+        color: black;
+    }
+    &.minorOutline .clubSuit::before {
+        content: '♧';
+        color: black;
+    }
+    &.bbo .clubSuit::before {
+        color: green;
+    }
+
+    & .handTitle {
+        font-size: 24px;
+    }
+
+    & .centre {
+        clear:both;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & .right {
+        float: right;
+        margin-left: var(--font-text-size);
+    }
+
+    & .left {
+        float: left;
+        margin-right: var(--font-text-size);
+    }
+
+    & h1,
+    & h3 {
+        clear: both;
+    }
+
 }

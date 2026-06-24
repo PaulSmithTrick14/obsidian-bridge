@@ -1,14 +1,39 @@
 import { MarkdownPostProcessorContext } from "obsidian";
 
 export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTMLElement, context: MarkdownPostProcessorContext) {
+    const sectionInfo = context.getSectionInfo(bridgeBlockElement)
+    const header = sectionInfo?.text.split("\n")[sectionInfo.lineStart]
+    const params = header?.split('handviewer')[1]?.trim();
+    const data = new URLSearchParams(params);
+
     const rows = source.split('\n').map(r => r.trim()).filter((row) => row.length > 2);
     if (rows.length < 1) return;
+
+    const positionValue = data.get('position');
+    let positionClass = 'centre';
+    if (positionValue !== null) {
+        if (positionValue[0] === "'" || positionValue[0] === '"') {
+            positionClass = positionValue.slice(1,-1)
+        } else {
+            positionClass = positionValue;
+        }
+    }
+
+    bridgeBlockElement.parentElement?.removeClasses(['left','centre','right']);
+    bridgeBlockElement.parentElement?.addClass(positionClass);
+
+    if (data.has('title')) {
+        const titleDiv = document.createElement('div')
+        titleDiv.addClass('handTitle')
+        titleDiv.textContent = data.get('title')?.slice(1,-1) ?? ''
+        bridgeBlockElement.parentElement?.insertBefore(titleDiv, bridgeBlockElement)
+    }
 
     const frame = bridgeBlockElement.createEl('iframe');
 
     const HAND_VIEWER = 'https://www.bridgebase.com/tools/handviewer.html?'
     let query = '';
-    for (var row of rows) {
+    for (let row of rows) {
         const pair = row.split('=');
         if (pair.length != 2) continue;
         const attr = pair[0]?.toLocaleLowerCase();
@@ -33,25 +58,33 @@ export function renderInlineSnippets(element: HTMLElement, context: MarkdownPost
     }
 }
 
-const REPLACEMENTS: Record<string, string> = {
-  'C': '<span class="clubSuit"></span>',
-  'D': '<span class="diamondSuit"></span>',
-  'H': '<span class="heartSuit"></span>',
-  'S': '<span class="spadeSuit"></span>',
-  ' ': '',
-  ':': '&thinsp;:&thinsp;',
-  ';': '&nbsp;;&nbsp;',
-  'T': '10'
+const REPLACEMENTS: Record<string, (parent: HTMLElement) => void> = {
+  'C': (p) => p.createSpan({ cls: 'clubSuit'}),
+  'D': (p) => p.createSpan({ cls: 'diamondSuit'}),
+  'H': (p) => p.createSpan({ cls: 'heartSuit'}),
+  'S': (p) => p.createSpan({ cls: 'spadeSuit'}),
+  ' ': (p) => {},
+  ':': (p) => p.append('\u200a:\u200a'),
+  ';': (p) => p.append('\u00a0;\u00a0'),
+  'T': (p) => p.append('10'),
+  'N': (p) => p.append('NT')
 };
 
 function renderInlineSnippet(snippet: HTMLElement) {
     const snippetText = snippet.innerText.trim().toLocaleUpperCase();
-    let newText = '';
+    const replacement = document.createDocumentFragment().createSpan({cls: 'snippet'});
     for (let c of snippetText) {
-        newText += REPLACEMENTS[c] ?? c
+        let action = REPLACEMENTS[c];
+        if (action) {
+            action(replacement);
+        } else {
+            replacement.append(c)
+        }
     }
 
-    const newSpan = snippet.createSpan();
-    newSpan.innerHTML = newText;
-    snippet.replaceWith(newSpan);
+    snippet.replaceWith(replacement);
 }
+
+// export function renderBridgeBlocks(element: HTMLElement, context: MarkdownPostProcessorContext) {
+//     console.log(`block = ${element.innerHTML}`)
+// }
