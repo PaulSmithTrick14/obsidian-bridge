@@ -42,7 +42,6 @@ export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTML
                     value = val.replace(/ /g, '')
                 } 
                 viewerParams.append(attr, encodeURIComponent(value));
-                console.log(`Append ${attr}, new entries.length = ${viewerParams.size}`)
                 if (attr === 'n') frame.addClass('north');
                 if (attr === 'e') frame.addClass('east');
                 if (attr === 's') frame.addClass('south');
