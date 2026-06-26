@@ -6,10 +6,7 @@ export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTML
     const header = sectionInfo.text.split("\n")[sectionInfo.lineStart]
     if (!header) return
     const headerElements = header.split(' ');
-    // let positionClass = 'centre';
-    // if (headerElements.length > 1) {
-const        positionClass = headerElements[1] ?? 'centre';
-    // }
+    const positionClass = headerElements[1] ?? 'centre';
 
     const rows = source.split('\n').map(r => r.trim());
     if (rows.length < 1) return;
@@ -17,23 +14,23 @@ const        positionClass = headerElements[1] ?? 'centre';
     bridgeBlockElement.parentElement?.removeClasses(['left','centre','right']);
     bridgeBlockElement.parentElement?.addClass(positionClass);
 
-    let oneHand = createDiv({cls: 'oneViewer'});
+    let oneHand = document.body.createDiv({cls: 'oneViewer'});
 
     const HAND_VIEWER_ROOT = 'https://www.bridgebase.com/tools/handviewer.html'
 
-    let frame = createEl('iframe');
+    let frame = oneHand.createEl('iframe');
     let viewer = new URL(HAND_VIEWER_ROOT);
     for (let row of rows) {
         const pair = row.split('=');
         // Blank line start a new hand
         if (pair.length < 2) {
             frame.setAttr('src', viewer.toString());
-            oneHand.append(frame);
+            // oneHand.append(frame);
             bridgeBlockElement.append(oneHand)
 
-            frame = createEl('iframe')
+            oneHand = document.body.createDiv({cls: 'oneViewer'})
+            frame = oneHand.createEl('iframe')
             viewer = new URL(HAND_VIEWER_ROOT);
-            oneHand = createDiv({cls: 'oneViewer'})
         } else {
 
             const attr = pair[0]!.toLocaleLowerCase();
@@ -57,7 +54,7 @@ const        positionClass = headerElements[1] ?? 'centre';
 
     if (viewer.searchParams.size > 0) {
         frame.setAttr('src', viewer.toString())
-        oneHand.append(frame);
+        // oneHand.append(frame);
         bridgeBlockElement.append(oneHand)
     }
 }

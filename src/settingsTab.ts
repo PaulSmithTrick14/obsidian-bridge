@@ -44,8 +44,4 @@ export class BridgeStylerTab extends PluginSettingTab {
                     })
                 );
     }
-
-    // saveSettings() {
-    //     return await this.plugin.saveSettings();
-    // }
 }
