@@ -37,15 +37,15 @@ export class BridgeStylerTab extends PluginSettingTab {
                 .addDropdown((dropper) => dropper
                     .addOptions({ standard: 'Standard', bbo: 'BBO', minorOutline: 'Outline minors'})
                     .setValue(this.plugin.settings.suitStyle)
-                    .onChange((value: string) => {
+                    .onChange(async (value: string) => {
                         this.plugin.settings.suitStyle = value as suitStyles;
-                        this.saveSettings();
+                        await this.plugin.saveSettings();
                         this.plugin.setSuitStyle(value as suitStyles);
                     })
                 );
     }
 
-    saveSettings() {
-        (async () => {await this.plugin.saveSettings();})();
-    }
+    // saveSettings() {
+    //     return await this.plugin.saveSettings();
+    // }
 }
