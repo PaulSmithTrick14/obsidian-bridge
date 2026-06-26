@@ -19,30 +19,30 @@ export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTML
     const HAND_VIEWER_ROOT = 'https://www.bridgebase.com/tools/handviewer.html'
 
     let frame = oneHand.createEl('iframe');
-    let viewer = new URL(HAND_VIEWER_ROOT);
+    let viewerParams = new URLSearchParams();
     for (let row of rows) {
         const pair = row.split('=');
         // Blank line start a new hand
         if (pair.length < 2) {
-            frame.setAttr('src', viewer.toString());
-            // oneHand.append(frame);
-            bridgeBlockElement.append(oneHand)
-
-            oneHand = document.body.createDiv({cls: 'oneViewer'})
-            frame = oneHand.createEl('iframe')
-            viewer = new URL(HAND_VIEWER_ROOT);
+            if (viewerParams.size > 0) {
+                frame.setAttr('src', `${HAND_VIEWER_ROOT}?${viewerParams}`);
+                bridgeBlockElement.append(oneHand)
+                oneHand = document.body.createDiv({cls: 'oneViewer'})
+                frame = oneHand.createEl('iframe')
+                viewerParams = new URLSearchParams();
+            }
         } else {
-
             const attr = pair[0]!.toLocaleLowerCase();
             const val = pair[1]!;
             let value = val;
             if (attr === 'title') {
-                oneHand.createDiv({text: pair[1], cls: 'handTitle'})
+                oneHand.insertBefore(oneHand.createDiv({text: pair[1], cls: 'handTitle'}), frame)
             } else {
                 if (attr === 'n' || attr === 'e' || attr === 's' || attr === 'w') {
                     value = val.replace(/ /g, '')
                 } 
-                viewer.searchParams.append(attr, encodeURIComponent(value));
+                viewerParams.append(attr, encodeURIComponent(value));
+                console.log(`Append ${attr}, new entries.length = ${viewerParams.size}`)
                 if (attr === 'n') frame.addClass('north');
                 if (attr === 'e') frame.addClass('east');
                 if (attr === 's') frame.addClass('south');
@@ -52,9 +52,8 @@ export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTML
         }
     }
 
-    if (viewer.searchParams.size > 0) {
-        frame.setAttr('src', viewer.toString())
-        // oneHand.append(frame);
+    if (viewerParams.size > 0) {
+        frame.setAttr('src', `${HAND_VIEWER_ROOT}?${viewerParams}`)
         bridgeBlockElement.append(oneHand)
     }
 }
