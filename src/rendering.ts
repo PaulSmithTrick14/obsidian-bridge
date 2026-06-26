@@ -66,7 +66,7 @@ export function renderFloatClear(element: HTMLElement, context: MarkdownPostProc
     if (!element) return;
     for (const ele of Array.from(element.querySelectorAll(".el-p p"))) {
         const text = (ele as HTMLParagraphElement).textContent;
-        if (text.slice(text.length-2) === '||') {
+        if (text && text.length > 2 && text.slice(text.length-2) === '||') {
             clearAfterParagraph(ele as HTMLParagraphElement);
         }
     }
