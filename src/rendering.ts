@@ -2,53 +2,74 @@ import { MarkdownPostProcessorContext } from "obsidian";
 
 export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTMLElement, context: MarkdownPostProcessorContext) {
     const sectionInfo = context.getSectionInfo(bridgeBlockElement)
-    const header = sectionInfo?.text.split("\n")[sectionInfo.lineStart]
-    const params = header?.split('handviewer')[1]?.trim();
-    const data = new URLSearchParams(params);
+    if (!sectionInfo) return
+    const header = sectionInfo.text.split("\n")[sectionInfo.lineStart]
+    if (!header) return
+    const headerElements = header.split(' ');
+    // let positionClass = 'centre';
+    // if (headerElements.length > 1) {
+const        positionClass = headerElements[1] ?? 'centre';
+    // }
 
-    const rows = source.split('\n').map(r => r.trim()).filter((row) => row.length > 2);
+    const rows = source.split('\n').map(r => r.trim());
     if (rows.length < 1) return;
-
-    const positionValue = data.get('position');
-    let positionClass = 'centre';
-    if (positionValue !== null) {
-        if (positionValue[0] === "'" || positionValue[0] === '"') {
-            positionClass = positionValue.slice(1,-1)
-        } else {
-            positionClass = positionValue;
-        }
-    }
 
     bridgeBlockElement.parentElement?.removeClasses(['left','centre','right']);
     bridgeBlockElement.parentElement?.addClass(positionClass);
 
-    if (data.has('title')) {
-        const titleDiv = document.createElement('div')
-        titleDiv.addClass('handTitle')
-        titleDiv.textContent = data.get('title')?.slice(1,-1) ?? ''
-        bridgeBlockElement.parentElement?.insertBefore(titleDiv, bridgeBlockElement)
-    }
+    let oneHand = createDiv({cls: 'oneViewer'});
 
-    const frame = bridgeBlockElement.createEl('iframe');
+    const HAND_VIEWER_ROOT = 'https://www.bridgebase.com/tools/handviewer.html'
 
-    const HAND_VIEWER = 'https://www.bridgebase.com/tools/handviewer.html?'
-    let query = '';
+    let frame = createEl('iframe');
+    let viewer = new URL(HAND_VIEWER_ROOT);
     for (let row of rows) {
         const pair = row.split('=');
-        if (pair.length != 2) continue;
-        const attr = pair[0]?.toLocaleLowerCase();
-        const value = encodeURIComponent(pair[1]!);
-        query += attr + '=' + value + '&'
-        if (attr === 'n') frame.addClass('north');
-        if (attr === 'e') frame.addClass('east');
-        if (attr === 's') frame.addClass('south');
-        if (attr === 'w') frame.addClass('west');
-        if (attr === 'a') frame.addClass('auction');
+        // Blank line start a new hand
+        if (pair.length < 2) {
+            frame.setAttr('src', viewer.toString());
+            oneHand.append(frame);
+            bridgeBlockElement.append(oneHand)
+
+            frame = createEl('iframe')
+            viewer = new URL(HAND_VIEWER_ROOT);
+            oneHand = createDiv({cls: 'oneViewer'})
+        } else {
+
+            const attr = pair[0]!.toLocaleLowerCase();
+            const val = pair[1]!;
+            let value = val;
+            if (attr === 'title') {
+                oneHand.createDiv({text: pair[1], cls: 'handTitle'})
+            } else {
+                if (attr === 'n' || attr === 'e' || attr === 's' || attr === 'w') {
+                    value = val.replace(/ /g, '')
+                } 
+                viewer.searchParams.append(attr, encodeURIComponent(value));
+                if (attr === 'n') frame.addClass('north');
+                if (attr === 'e') frame.addClass('east');
+                if (attr === 's') frame.addClass('south');
+                if (attr === 'w') frame.addClass('west');
+                if (attr === 'a') frame.addClass('auction');
+            }
+        }
     }
 
-    frame.setAttrs({
-        'src': HAND_VIEWER + query.slice(0, -1)
-    });
+    if (viewer.searchParams.size > 0) {
+        frame.setAttr('src', viewer.toString())
+        oneHand.append(frame);
+        bridgeBlockElement.append(oneHand)
+    }
+}
+
+export function renderFloatClear(element: HTMLElement, context: MarkdownPostProcessorContext) {
+    if (!element) return;
+    for (const ele of Array.from(element.querySelectorAll(".el-p p"))) {
+        const text = (ele as HTMLParagraphElement).textContent;
+        if (text.slice(text.length-2) === '||') {
+            clearAfterParagraph(ele as HTMLParagraphElement);
+        }
+    }
 }
 
 export function renderInlineSnippets(element: HTMLElement, context: MarkdownPostProcessorContext) {
@@ -72,19 +93,25 @@ const REPLACEMENTS: Record<string, (parent: HTMLElement) => void> = {
 
 function renderInlineSnippet(snippet: HTMLElement) {
     const snippetText = snippet.innerText.trim().toLocaleUpperCase();
+    let previous = '';
     const replacement = document.createDocumentFragment().createSpan({cls: 'snippet'});
     for (let c of snippetText) {
+        if (c === 'T' && previous === 'N') continue
         let action = REPLACEMENTS[c];
         if (action) {
             action(replacement);
         } else {
             replacement.append(c)
         }
+        previous = c;
     }
 
     snippet.replaceWith(replacement);
 }
 
-// export function renderBridgeBlocks(element: HTMLElement, context: MarkdownPostProcessorContext) {
-//     console.log(`block = ${element.innerHTML}`)
-// }
+function clearAfterParagraph(par: HTMLParagraphElement) {
+    par.addClass('clearFloat');
+    const lastNode = par.lastChild!;
+    const newNode = document.createTextNode(lastNode.textContent!.slice(0,-2));
+    par.replaceChild(newNode, lastNode);
+}

@@ -1,9 +1,21 @@
 .bridge-styler {
     --base-size: calc(8 * var(--font-text-size));
-    /* & .block-language-handviewer {
+
+    & .block-language-handviewer {
         display: flex;
-        justify-content: center;
-    } */
+        justify-content: space-around;
+        align-items: start;
+    }
+
+    & .oneViewer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    & .auction {
+        width: var(--base-size);
+    }
 
     & .north,
     & .south,
@@ -85,17 +97,17 @@
     &.bbo .clubSuit::before {
         color: green;
     }
-
+    
     & .handTitle {
         font-size: 24px;
     }
 
     & .centre {
         clear:both;
-        display: flex;
+        /* display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: center; */
     }
 
     & .right {
@@ -108,9 +120,14 @@
         margin-right: var(--font-text-size);
     }
 
-    & h1,
+    & .clearFloat::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    /* & h1,
     & h3 {
         clear: both;
-    }
+    } */
 
 }

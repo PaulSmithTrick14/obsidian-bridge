@@ -1,6 +1,7 @@
 import { Plugin } from 'obsidian'
 import { 
 	renderBlockAsHandViewer, 
+	renderFloatClear, 
 	renderInlineSnippets 
 } from './rendering.js';
 import { 
@@ -30,6 +31,7 @@ export default class BridgeStylerPlugin extends Plugin {
 		);
 
 		this.registerMarkdownPostProcessor(renderInlineSnippets);
+		this.registerMarkdownPostProcessor(renderFloatClear);
 	}
 
 	onunload(): void {
