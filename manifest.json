@@ -1,9 +1,9 @@
 {
 	"id": "bridge-styler",
 	"name": "Bridge Styler",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Use a code block top display bridge hands and/or auctions.  Uses Bridge Base HandViewer to display",
+	"description": "Adds a code block language `handviewer` to display bridge hands and/or auctions using Bridge Base HandViewer.  Code snippets are interpreted in a Bridge friendly manner",
 	"author": "Paul Smith",
 	"authorUrl": "https://trick14.com",
 	"isDesktopOnly": false

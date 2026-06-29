@@ -30,7 +30,9 @@ Example:
 - ` ```handviewer centre` - As if no parameter is provided
 
 ## handviewer specification
-Within the handviewer block one attribute is specified per line.  The possible attributes are
+Within the handviewer block one attribute is specified per line.  A blank line starts a new HandViewer.  Multiple hand viewers are displayed side-by-side in preview mode.
+
+The possible attributes are
 - `title` - A div is added above the hand and text is formatted with h2 size but normal weight. `title=Checkback example`
 - `n`, `e`, `s`, `w` - The cards held by the seat.  Spaces between suits are optional, 10 can be specified as `t`, `T` or `10` but is always displayed as `10`. An `x` can be used to indicate an unknown card(s). Fewer than 13 cards can be specified for a hand, if desired.  No more than 13 cards can be specified for a hand.  The same card cannot be specified in more than one hand.  If three full hands of 13 cards are specified then the fourth hand is automatically filled in on the diagram.  An example `n=Sakt76 Hq104 dxxx cj7`
 - `nn`, `en`, `sn`, `wn` - The name displayed above the hand.  Typically, a player name or position title (declarer, dummy, etc).  If not specified then the seat name is used `North`, `South`, etc.  `sn=G Belladonna`, `nn=Dummy`
