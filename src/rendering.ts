@@ -41,7 +41,9 @@ export function	renderBlockAsHandViewer(source: string, bridgeBlockElement: HTML
                 if (attr === 'n' || attr === 'e' || attr === 's' || attr === 'w') {
                     value = val.replace(/ /g, '')
                 } 
-                const encoded = (attr !== `a` && attr!==`p`) ? encodeURIComponent(value) : value
+
+                // Don't encode because hand viewer does not decode
+                const encoded = value// (attr !== `a` && attr!==`p`) ? encodeURIComponent(value) : value
                 viewerParams.append(attr, encoded);
                 if (attr === 'n') frame.addClass('north');
                 if (attr === 'e') frame.addClass('east');

@@ -1,7 +1,7 @@
 {
 	"id": "bridge-styler",
 	"name": "Bridge Styler",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Adds a code block language `handviewer` to display bridge hands and/or auctions using Bridge Base HandViewer.  Code snippets are interpreted in a Bridge friendly manner",
 	"author": "Paul Smith",
