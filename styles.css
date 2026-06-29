@@ -99,7 +99,7 @@
     }
     
     & .handTitle {
-        font-size: 24px;
+        font-size: var(--h2-size);
     }
 
     & .centre {
